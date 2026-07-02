@@ -1,9 +1,23 @@
 ---
-name: goal-setter
-description: Draft, audit, or activate a compact /goal when the user asks for a persistent objective or wants Codex to work until a verifiable outcome is true. Defines Done, evidence, constraints, stop conditions, optional one-question-at-a-time clarification, and only necessary worker use. Not for ordinary implementation, Q&A, one-off edits, loose brainstorming, or subjective work with no rubric.
+name: rashinban
+description: Draft, audit, or activate a compact /goal when the user asks for a persistent objective or wants an agent to work until a verifiable outcome is true. Defines Done, evidence, constraints, stop conditions, optional one-question-at-a-time clarification, and only necessary worker use. Not for ordinary implementation, Q&A, one-off edits, loose brainstorming, or subjective work with no rubric.
+guardrails:
+  must:
+    - "Pin only outcome, evidence, constraints, boundaries, and stop condition — not procedure"
+    - "Make Done pass/fail and evidence-bounded; never claim done without verification"
+    - "Lint the drafted /goal with scripts/goal_lint.py before activating"
+  must_not:
+    - "Shrink or reinterpret the requested outcome (minimize only the surrounding prompt)"
+    - "Substitute a mock/demo/fixture for the real thing unless the user asked for one"
+    - "Auto-set a Codex goal that must launch spawn_agent/create_thread — return the /goal line for the user to send"
+  requires_approval:
+    - "Crossing schema / auth / billing / production boundaries"
+    - "Promoting a goal into the plans-store SoT (the bridge only drops to an inbox)"
 ---
 
-# Goal Setter
+# 羅針盤 / Rashinban — Goal Setter (harness edition)
+
+> Based on [goal-setter-skill](https://github.com/gotalab/goal-setter-skill) by gotalab (MIT). Rashinban keeps this contract spec and adds a deterministic harness: `scripts/goal_lint.py` (element + quality + length gate), `bin/rashinban` (host-aware lint / activate / bridge), `scripts/goal_seek_bridge.py` (AKATSUKI plans-store drop-off), and `references/` (templates, validation playbooks, cross-runtime routing). Lint the draft before activating.
 
 Turn a rough request into a compact `/goal` that says what result is expected, what Done means, how to check it, what must not be broken, when to stop, and how Codex should run it. Treat this as Goal intake: decide whether to ask, briefly explore, draft, activate, or say a normal prompt is a better fit.
 

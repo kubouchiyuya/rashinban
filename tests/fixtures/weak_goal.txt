@@ -1,0 +1,2 @@
+Make the dashboard better and improve performance and add more features so it
+works nicely and looks good.

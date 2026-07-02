@@ -1,11 +1,11 @@
 {
-  "name": "goal-setter",
-  "version": "0.9.3",
-  "description": "Draft or activate compact Codex goals for verifiable long runs. Defines the result, evidence, constraints, stop rules, limited clarification, and only worthwhile extra review or separate threads.",
+  "name": "rashinban",
+  "version": "0.1.0",
+  "description": "Rashinban — a compass for autonomous agent goals. Draft, lint, and activate a compact, verifiable /goal for long runs. Harness-engineered derivative of goal-setter by gotalab (MIT).",
   "author": {
-    "name": "gotalab"
+    "name": "kubouchiyuya"
   },
-  "homepage": "https://github.com/gotalab/goal-setter-skill",
+  "homepage": "https://github.com/kubouchiyuya/rashinban",
   "license": "MIT",
   "keywords": [
     "goal",
@@ -13,7 +13,9 @@
     "long-running",
     "meta-prompting",
     "claude-code",
-    "codex"
+    "codex",
+    "grok",
+    "gemini"
   ],
-  "repository": "https://github.com/gotalab/goal-setter-skill"
+  "repository": "https://github.com/kubouchiyuya/rashinban"
 }

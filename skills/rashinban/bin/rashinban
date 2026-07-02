@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+"""rashinban — a compass for autonomous agent goals.
+
+Turns a drafted /goal into a linted, host-aware, activatable contract, and can
+bridge it into AKATSUKI's plans-store for goal-seek. It authors and checks goal
+text; it does not implement a scheduler (it rides each runtime's native goal
+mechanism, like upstream goal-setter).
+
+Commands:
+  rashinban lint <file> [--json] [--strict]     quality + length gate
+  rashinban host                                 detect the runtime/agent
+  rashinban activate <file> [--json]             lint, then emit the /goal line
+                                                 + host-appropriate guidance
+  rashinban bridge <file> --title T [--id AKT-N] write the goal into plans-store
+  rashinban selfcheck
+
+Based on goal-setter-skill by gotalab (MIT).
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+SKILL = HERE.parent
+sys.path.insert(0, str(SKILL / "scripts"))
+
+import goal_lint  # noqa: E402
+
+
+def _read(path: str) -> str:
+    return sys.stdin.read() if path == "-" else Path(path).read_text("utf-8")
+
+
+def detect_host() -> dict:
+    home = Path.home()
+    env = os.environ
+    signals = {
+        "codex": bool(env.get("CODEX_SANDBOX") or (home / ".codex").exists()),
+        "claude-code": bool(env.get("CLAUDE_PROJECT_DIR") or (home / ".claude").exists()),
+        "cursor": (Path(".cursorrules").exists() or (home / ".cursor").exists()),
+        "gemini": (Path("GEMINI.md").exists() or (home / ".gemini").exists()),
+        "grok": (home / ".grok").exists(),
+    }
+    active = [k for k, v in signals.items() if v]
+    return {"signals": signals, "active": active}
+
+
+def _activation_guidance(host_active: list) -> list:
+    g = []
+    if "codex" in host_active:
+        g.append("Codex: if the goal does NOT need spawn_agent/create_thread, it "
+                 "may be set with the native goal tool; if it DOES, YOU must send "
+                 "the /goal line — sending it is what authorizes those tools.")
+    if "claude-code" in host_active:
+        g.append("Claude Code: send the /goal line; the goal can fan out as a "
+                 "dynamic workflow (read-only stages → subagents).")
+    for a in ("grok", "openai", "gemini", "cursor"):
+        if a in host_active:
+            g.append(f"{a}: no native goal tool assumed — send the /goal line and "
+                     f"let the agent run it; keep run/stop rules in the contract.")
+    if not g:
+        g.append("No runtime detected — send the emitted /goal line to your agent.")
+    return g
+
+
+def cmd_lint(a) -> int:
+    obj = goal_lint.extract_objective(_read(a.path))
+    rep = goal_lint.lint(obj)
+    print(json.dumps(rep, indent=2, ensure_ascii=False) if a.json else goal_lint.render(rep))
+    if rep["length"]["over_cap"]:
+        return 1
+    if a.strict and rep["missing_core"]:
+        return 3
+    return 0
+
+
+def cmd_host(a) -> int:
+    print(json.dumps(detect_host(), indent=2))
+    return 0
+
+
+def cmd_activate(a) -> int:
+    obj = goal_lint.extract_objective(_read(a.path))
+    rep = goal_lint.lint(obj)
+    host = detect_host()
+    out = {"lint": rep, "host": host["active"],
+           "goal_line": "/goal " + obj,
+           "guidance": _activation_guidance(host["active"])}
+    if a.json:
+        print(json.dumps(out, indent=2, ensure_ascii=False))
+        return 0
+    print(goal_lint.render(rep))
+    if rep["missing_core"]:
+        print("\n[hold] fix missing core elements before activating (see above).")
+        return 3
+    print("\n--- /goal (copy/send to your agent) ---\n/goal " + obj)
+    print("\nhost:", ", ".join(host["active"]) or "none")
+    for line in _activation_guidance(host["active"]):
+        print("  - " + line)
+    return 0
+
+
+def cmd_bridge(a) -> int:
+    sys.path.insert(0, str(SKILL / "scripts"))
+    import goal_seek_bridge
+    obj = goal_lint.extract_objective(_read(a.path))
+    res = goal_seek_bridge.write_goal(obj, title=a.title, akt_id=a.id)
+    print(json.dumps(res, indent=2, ensure_ascii=False))
+    return 0 if res.get("ok") else 1
+
+
+def cmd_selfcheck(a) -> int:
+    from shutil import which
+    print("rashinban selfcheck")
+    print(f"  python : {sys.version.split()[0]}")
+    print(f"  git    : {which('git') or 'absent'}")
+    h = detect_host()
+    print(f"  host   : {', '.join(h['active']) or 'none detected'}")
+    ps = Path(".claude/state/plans-store")
+    print(f"  plans-store: {'found' if ps.exists() else 'not in this dir'}")
+    return 0
+
+
+def main(argv=None) -> int:
+    p = argparse.ArgumentParser(prog="rashinban")
+    sub = p.add_subparsers(dest="cmd", required=True)
+    pl = sub.add_parser("lint"); pl.add_argument("path"); pl.add_argument("--json", action="store_true")
+    pl.add_argument("--strict", action="store_true"); pl.set_defaults(fn=cmd_lint)
+    sub.add_parser("host").set_defaults(fn=cmd_host)
+    pa = sub.add_parser("activate"); pa.add_argument("path"); pa.add_argument("--json", action="store_true")
+    pa.set_defaults(fn=cmd_activate)
+    pb = sub.add_parser("bridge"); pb.add_argument("path"); pb.add_argument("--title", required=True)
+    pb.add_argument("--id"); pb.set_defaults(fn=cmd_bridge)
+    sub.add_parser("selfcheck").set_defaults(fn=cmd_selfcheck)
+    a = p.parse_args(argv)
+    return a.fn(a)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

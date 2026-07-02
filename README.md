@@ -1,132 +1,74 @@
-# goal-setter
+<div align="center">
 
-**Turn rough long-running work into a compact Codex `/goal` with a clear finish line.**
+# 羅針盤 / Rashinban
 
-goal-setter is a Codex skill for work that needs more than a one-off prompt. It
-turns a rough request into a short goal that fixes the result, the evidence for
-success, the boundaries, and the stop rules, while leaving implementation
-judgment to the runner.
+### A compass for autonomous agent goals — turn a rough request into a linted, verifiable `/goal`.
 
-It favors verification targets over rule-heavy procedures: the goal should say
-what must be proven, not prescribe every step.
+[![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
+[![Based on goal-setter](https://img.shields.io/badge/based%20on-goal--setter%20by%20gotalab-black.svg)](https://github.com/gotalab/goal-setter-skill)
+[![Every agent](https://img.shields.io/badge/Codex%20%7C%20Claude%20%7C%20Grok%20%7C%20OpenAI%20%7C%20Gemini-black.svg)](skills/rashinban/adapters/ROUTING.md)
 
-Built for **Codex**. Works on **Claude Code** too.
+日本語版は [README.ja.md](README.ja.md)
 
-[日本語](README.ja.md)
+</div>
 
-<p align="center">
-  <img src="assets/goal-setter-icon.png" alt="Goal Setter icon: loose requests converging into a checked goal" width="180">
-</p>
+> **Attribution.** Rashinban is a **harness-engineered derivative** of
+> [goal-setter-skill](https://github.com/gotalab/goal-setter-skill) by **gotalab**,
+> under its original **MIT License**. The goal-contract spec is gotalab's;
+> Rashinban adds a deterministic harness around it. See [NOTICE.md](NOTICE.md).
 
-## When to Use It
+---
 
-Do not turn every request into a Goal. Use goal-setter when the work can keep
-going across several checks and the finish line must be judged by evidence.
+## What it is
 
-| Work | Better format |
-| --- | --- |
-| One clear edit, explanation, or review | Normal prompt |
-| Narrow work that may need a few tries | One sentence or short paragraph Goal |
-| Migration, performance work, broad bug fixing, or evidence-backed research | Standard Goal |
-| Long research or high-risk change | Goal plus the smallest needed plan, checklist, or evaluation file |
+A **meta-skill**: it does not implement your task — it turns a rough request into
+a compact `/goal` that states the outcome, how Done is verified, what must not
+break, and when to stop, so an AI agent (Codex, Claude Code, Grok, OpenAI,
+Gemini…) can run **until a verifiable outcome is true**.
 
-## What It Does
+Upstream goal-setter is essentially one very good prompt. **Rashinban wraps it in
+a harness:**
 
-- Reconstructs the intended result before drafting.
-- Adds only clauses that change the result, evidence, boundary, risk, or stop
-  decision.
-- Asks one material question at a time only when the answer would change the
-  goal.
-- Keeps small work light; for long work, keeps an evidence-based open-items
-  loop and adds read-only review or separate write threads only when useful.
+| Added | What it does |
+|---|---|
+| `scripts/goal_lint.py` | Quality gate — checks the contract *elements* (objective / evidence / Done / validation / constraints / block), flags vague "better/works" and task-list-as-Done, scores 0-100, and enforces the real 4,000-char runtime cap (Codex codepoints + Claude Code UTF-16). |
+| `bin/rashinban` | Host-aware CLI — `lint`, `host`, `activate` (emits the `/goal` line + runtime-correct guidance), `bridge`, `selfcheck`. |
+| `scripts/goal_seek_bridge.py` | Drops the goal into AKATSUKI `plans-store` (`rashinban-inbox.jsonl`, non-destructive) for goal-seek. |
+| `references/` | `templates.md` (ready `/goal` skeletons), `validation-playbooks.md` (per-domain "verified" means), `adapters/ROUTING.md` (cross-runtime activation). |
+| `tests/smoke.sh` | Offline assertions: good goal passes, weak goal is flagged, over-cap fails. |
 
-Details live in [docs/RUNTIME.md](docs/RUNTIME.md). Examples live in
-[docs/EXAMPLES.md](docs/EXAMPLES.md).
-
-## Install
-
-Pick one install path:
-
-| If you use | Install | Invoke with |
-| --- | --- | --- |
-| Codex App `/plugins` | Codex App Plugin | `$goal-setter:goal-setter ...` |
-| Codex local skills | Codex Skill | `$goal-setter ...` |
-| Claude Code | Claude Code marketplace | `/goal-setter:goal-setter ...` |
-| Another agent with Skills CLI support | Skills CLI | the agent's skill invocation syntax |
-
-Most Codex App users should install only the **Codex App Plugin**.
-
-### Codex App Plugin
-
-In Codex, open `/plugins`, choose **Add plugin marketplace**, and enter:
-
-```text
-Source: gotalab/goal-setter-skill
-Git ref: main
-Sparse paths: plugins/goal-setter
-```
-
-Then install **Goal Setter** from the Plugins screen.
-
-### Codex Skill
-
-In Codex chat:
-
-```text
-$skill-installer install https://github.com/gotalab/goal-setter-skill/tree/main/skills/goal-setter
-```
-
-Restart Codex, then invoke with `$goal-setter`.
-
-### Claude Code
-
-```text
-/plugin marketplace add gotalab/goal-setter-skill
-/plugin install goal-setter@goal-setter
-```
-
-Invoke with `/goal-setter:goal-setter`.
-
-### Skills CLI
+## Quickstart
 
 ```bash
-npx skills add gotalab/goal-setter-skill
+python3 skills/rashinban/scripts/goal_lint.py my-goal.md      # lint a drafted /goal
+python3 skills/rashinban/bin/rashinban activate my-goal.md    # lint + emit the /goal line
+python3 skills/rashinban/bin/rashinban selfcheck
+sh tests/smoke.sh
 ```
 
-## Usage
+Lint output names missing core elements and weak phrasing, and scores the draft.
+A good score is not a good Goal by itself — it means the contract is *well-formed*.
 
-Draft a goal without activating it:
+## How activation works (it rides the runtime, no scheduler)
 
-```text
-$goal-setter draft a goal for migrating our API client to v2
-```
+| Runtime | Activation |
+|---|---|
+| **Codex**, no worker tools | native goal tool may set it |
+| **Codex**, needs `spawn_agent`/`create_thread` | **you** send the `/goal` line — that is what authorizes those tools |
+| **Claude Code** | send the `/goal` line; can fan out as a dynamic workflow |
+| **Grok / OpenAI / Gemini / Cursor** | send the `/goal` line; keep run/stop rules in the contract |
 
-Shape and activate a goal when Codex does not need extra worker tools:
+Details: [skills/rashinban/adapters/ROUTING.md](skills/rashinban/adapters/ROUTING.md).
 
-```text
-$goal-setter set a goal: all checkout tests pass after the refactor
-```
+## The contract Rashinban writes
 
-When the goal must launch Codex worker tools such as `spawn_agent` or
-`create_thread`, goal-setter returns an exact `/goal ...` line for you to send.
-That user-sent line is what authorizes those tools.
+Objective (one verifiable end state) · Evidence/verification · Core flow &
+pass-fail checks · Read-first anchors · Constraints & boundaries · Validation
+(per-domain) · Done (pass/fail, evidence-bounded, risk-matched review) · Run
+rules · Block/stop · Final report. Full spec: [skills/rashinban/SKILL.md](skills/rashinban/SKILL.md).
 
-## Docs
+## License & credit
 
-- [Examples](docs/EXAMPLES.md)
-- [Runtime behavior](docs/RUNTIME.md)
-- [Changelog](CHANGELOG.md)
-
-## Repository
-
-```text
-skills/goal-setter/SKILL.md          # the skill
-skills/goal-setter/scripts/          # goal length validator
-scripts/                             # packaging and release checks
-plugins/goal-setter/                 # Codex plugin bundle
-.claude-plugin/                      # Claude Code plugin metadata
-```
-
-## License
-
-[MIT](LICENSE)
+MIT — see [LICENSE](LICENSE) (Copyright gotalab). Rashinban is an independent
+derivative and is **not affiliated with or endorsed by** gotalab. For the
+canonical goal-setter, use the [upstream repo](https://github.com/gotalab/goal-setter-skill).
