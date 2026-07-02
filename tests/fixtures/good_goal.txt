@@ -1,0 +1,6 @@
+Fix the login timeout so that users stay signed in for 24h, verified by an
+end-to-end browser run that logs in, waits, and confirms the session persists;
+the auth test suite (npm test auth) must stay green. Read src/auth/session.ts.
+Never weaken or delete existing auth tests. Done: the session persists in the
+real browser run and npm test auth passes with no related regression. Stop and
+ask if the fix would touch token signing, billing, or production config.
