@@ -67,6 +67,17 @@ pass-fail checks · Read-first anchors · Constraints & boundaries · Validation
 (per-domain) · Done (pass/fail, evidence-bounded, risk-matched review) · Run
 rules · Block/stop · Final report. Full spec: [skills/rashinban/SKILL.md](skills/rashinban/SKILL.md).
 
+## Documentation
+
+| Doc | What it covers |
+|---|---|
+| [docs/GUIDE.md](docs/GUIDE.md) | plain-language guide (for non-engineers and AI users) |
+| [docs/QUICKSTART.md](docs/QUICKSTART.md) | install, lint, activate, bridge in minutes |
+| [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md) | the contract, the lint, the CLI, per-runtime activation, honest limits |
+| [docs/FAQ.md](docs/FAQ.md) | common questions |
+| [skills/rashinban/references/](skills/rashinban/references/) | templates · validation playbooks · routing |
+| 日本語 | [README.ja.md](README.ja.md) · [docs/GUIDE.ja.md](docs/GUIDE.ja.md) |
+
 ## License & credit
 
 MIT — see [LICENSE](LICENSE) (Copyright gotalab). Rashinban is an independent

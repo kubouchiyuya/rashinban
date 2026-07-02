@@ -60,6 +60,17 @@ lint は欠けている要素・弱い表現を挙げてスコア化します。
 
 詳細: [skills/rashinban/adapters/ROUTING.md](skills/rashinban/adapters/ROUTING.md)
 
+## ドキュメント
+
+| Doc | 内容 |
+|---|---|
+| [docs/GUIDE.ja.md](docs/GUIDE.ja.md) | 平易なガイド（非エンジニア/AIユーザー向け） |
+| [docs/QUICKSTART.md](docs/QUICKSTART.md) | install・lint・activate・bridge |
+| [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md) | 契約・lint・CLI・ランタイム別活性化・正直な限界 |
+| [docs/FAQ.md](docs/FAQ.md) | よくある質問 |
+| [skills/rashinban/references/](skills/rashinban/references/) | templates・validation playbooks・routing |
+| English | [README.md](README.md) · [docs/GUIDE.md](docs/GUIDE.md) |
+
 ## ライセンス・クレジット
 
 MIT — [LICENSE](LICENSE)（Copyright gotalab）。Rashinban は独立した派生であり
