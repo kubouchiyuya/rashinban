@@ -1,0 +1,329 @@
+# Changelog
+
+Current behavior is summarized in README.md and docs/RUNTIME.md. Older entries
+below are historical and may describe behavior that was later corrected.
+
+## 0.9.3
+
+- **Name the core philosophy.** The skill and README now state the contract
+  plainly: prefer verification targets and feedback loops over rigid procedure
+  rules, so goals travel better across real tasks.
+
+## 0.9.2
+
+- **Add a long-run feedback loop.** Long or high-risk goals can now require an
+  open-items loop in `execution-notes.md`: update required checks after each
+  evidence pass, then continue to the highest-risk or least-certain open item
+  until Done or a real block condition is reached.
+
+## 0.9.1
+
+- **Trim README back into an entry page.** README.md and README.ja.md now keep
+  the install path, when-to-use guidance, and links to detailed docs instead of
+  repeating runtime rules and long examples.
+- **Make Japanese docs plainer.** README.ja.md, docs/RUNTIME.ja.md, and
+  docs/EXAMPLES.ja.md now avoid unnecessary agent jargon while keeping required
+  tool names such as `spawn_agent` and `create_thread`.
+
+## 0.9.0
+
+- **Make short goals the default starting point.** Length guidance now starts
+  from one sentence or one short paragraph and treats 800-1,800 characters as a
+  range for genuinely complex goals, not the default.
+- **Clarify when to use Goal.** README now separates normal prompts from Goals:
+  use Goals for durable, verifiable work that can keep checking evidence and
+  trying the next useful step.
+- **Lighten examples.** Example goals no longer add read-only reviewers by
+  default; independent review is reserved for cases where it could change the
+  Done decision.
+
+## 0.8.16
+
+- **Add bounded clarification mode.** When the user asks to be grilled or a
+  missing decision would change Done, the skill now asks one material question
+  at a time with a recommended answer. It reads code, docs, or sources instead
+  of asking when the answer is discoverable.
+- **Keep the contract leaner.** The parallel-work and research guidance is
+  shorter, and existing tracking/report files are described as existing primary
+  files instead of a heavier canonical-artifact rule.
+
+## 0.8.15
+
+- **Keep small goals light.** Done review is now matched to risk: clear
+  low-risk work can rely on the relevant checks, broader work can use one
+  read-only reviewer, and high-risk claims can use adversarial review.
+- **Do not create repo structure just to parallelize.** `create_thread` now
+  requires independent write units, stable ownership, separate checks, understood
+  shared parts, clear time savings, and an existing git/worktree base. Goals now
+  say not to initialize git, scaffold architecture, or create shared interfaces
+  solely to enable parallel work.
+- **Shorten public trigger text and add release checks.** Skill and plugin
+  descriptions are shorter, and root-to-plugin sync plus version checks are now
+  scripted.
+
+## 0.8.14
+
+- **Clarify Codex worker-tool activation.** Any Codex goal that must launch
+  `spawn_agent` or `create_thread` is now returned as a user-sent `/goal`, even
+  when `spawn_agent` is only for final verification. Native `create_goal` is
+  reserved for goals that do not need those worker tools.
+- **Align examples with the runtime rule.** README and examples now name
+  `spawn_agent` explicitly and use the same `create_thread` bootstrap wording as
+  the skill body.
+
+## 0.8.13
+
+- **Compress goals around the official contract shape.** The skill now asks for
+  a final pass around outcome, verification surface, constraints, boundaries,
+  iteration policy, and blocked stop condition, cutting explanations, examples,
+  broad file lists, ordinary command-parallelism, and tool mechanics that do not
+  change the run.
+- **Reuse existing canonical artifacts.** When a requested spreadsheet, report,
+  checklist, doc, dashboard, or tracking file already has a canonical artifact,
+  goals now say to update it instead of creating a duplicate.
+- **Make adversarial verification explicit but bounded.** High-risk correctness,
+  safety, UX, security, research, or evidence-quality claims can ask a
+  read-only `spawn_agent` to look for counterexamples, unsupported claims,
+  missing checks, and overclaims, but only when there is a concrete target to
+  attack.
+- **Keep parallel wording lighter.** `spawn_agent` and `create_thread` are still
+  named when the goal must launch them, but ordinary command parallelization is
+  left to the executor and the full `create_thread` directive is reserved for
+  multiple non-trivial, independently verifiable write units.
+
+## 0.8.12
+
+- **Leave subagent fan-out size to the parent agent.** Goals now avoid fixed
+  subagent counts unless the user asks for one. The parent agent chooses the
+  number and waves of read-only subagents from independence, risk, cost, and how
+  much evidence it can integrate; it synthesizes each wave before launching
+  more. The rule applies beyond research to review, debugging, migration, and
+  development discovery.
+
+## 0.8.11
+
+- **Make checks concrete when the work allows it.** Goals now ask for counts,
+  named files, screens, cases, timings, error messages, or before/after states
+  instead of vague "better" or "works" checks when a concrete check is
+  available.
+- **Keep named items tied to their own checks.** If the user names specific
+  files, models, APIs, pages, or cases, the goal now requires those exact things
+  to be checked separately. Samples, demos, or substitutes can support the run,
+  but they no longer complete a named requirement unless the user allowed that
+  substitution.
+- **Leave a rerun path when blocked.** When an outside asset, account, service,
+  or permission blocks the real check, the goal now asks for the smallest next
+  user action and a command or check to rerun when practical.
+
+## 0.8.10
+
+- **Make hypothesis-driven research explicitly iterative.** Research goals now
+  require a central question, out-of-scope questions, competing hypotheses,
+  rejection criteria, evidence passes, confidence updates, reject/merge/split
+  decisions, new hypothesis generation, and a stop rule. At least one pass must
+  try to disprove the leading conclusion, and the final report must show
+  surviving and rejected hypotheses, unresolved questions, and next verification
+  steps.
+- **Make the public wording plainer.** README, skill metadata, and plugin UI
+  text now describe goal-setter as shaping rough requests into Codex goals with
+  expected results, Done checks, verification, constraints, stop rules, and
+  subagent/create_thread guidance, instead of leading with phrases like
+  outcome-first completion contract.
+
+## 0.8.9
+
+- **Recover the real requested outcome before implementation starts.** Added
+  guidance for broad product/system requests to define what must actually run,
+  connect, persist, produce, or be inspectable before treating a mock,
+  screenshot, scaffold, static dashboard, isolated component, or demo-data loop
+  as Done. Working systems now require the smallest complete user path plus
+  observable pass/fail checks before optional breadth.
+- **Support research and strategy goals without turning the first hypothesis
+  into the conclusion.** Uncertain work now has to leave room for hypothesis
+  generation, evidence gathering, counterevidence, confidence, unresolved
+  questions, and updates before synthesis; parallel research/review units may
+  be hypotheses, source families, stakeholder perspectives, risk areas, or
+  attempts to disprove the conclusion.
+- **Replace jargon with plainer execution language.** The skill and README now
+  use phrases such as "what must be achieved," "what would prove it," "path from
+  the user's request to the expected result," "pass/fail checks," and "no
+  visible dead ends" instead of internal shorthand like real value path,
+  acceptance matrix, hypothesis ledger, or anti-gaming.
+
+## 0.8.8
+
+- **Pin only real invariants; leave executor judgment open.** The contract
+  guidance now says to pin only the outcome, evidence, safety boundaries, and
+  non-negotiable constraints, while leaving implementation order, internal
+  design, decomposition details, and replace-vs-adapt choices to the executor
+  after it reads the repo or source material. Compatibility is now a boundary
+  only when requested, externally required, safety-relevant, or relevant to
+  validation; when the user allows breaking compatibility, goals should prefer
+  a simpler replace-over-adapt design with cleanup or migration evidence instead
+  of speculative adapters and fallback paths. The quality validation bar now
+  also covers readable, local, low-branching code changes and clear,
+  non-duplicative, easy-to-revise non-code artifacts.
+
+## 0.8.7
+
+- **Clean up public install and metadata wording.** Clarified that the
+  `$skill-installer ...` example is a Codex chat command, not a shell command;
+  replaced "image-first" metadata wording with "reconstructs the intended
+  outcome first" to avoid confusion with visual image input; and added a
+  changelog note that older entries are historical. Also clarified that the
+  Claude Code GitHub shorthand installs from the repository default branch by
+  default, with `@ref` available only when users want to pin a branch or tag.
+  Added a first-time install chooser so Codex App users know to use the plugin
+  path and which invocation name to try after install.
+
+## 0.8.6
+
+- **Let decomposition follow behavior before files.** The 0.8.5 pass changed child prompts from "owned files" to "owned surface," but one Codex fan-out gate still said "separable file ownership," which could push the model to partition by file layout too early. The parallel guidance now says to judge separability by behavioral coupling, shared state, and integration risk before file layout; file paths are clues to discover after reading the repo, not the deciding criterion. Updated SKILL.md and README (en/ja).
+
+## 0.8.5
+
+- **Tune the contract shape for GPT-5.5-style outcome-first prompting.** The skill already avoided implementation recipes, but this release makes the rule explicit: start from the smallest prompt that preserves the task contract, add only behavior-changing clauses, and reserve hard imperatives for true invariants. Exploration now has a bounded evidence pass instead of an open-ended "be thorough" feel, validation asks for the most relevant honest check rather than every possible check, and multi-step intake starts with a short visible preamble before tools. The Codex `create_thread` child prompt wording now assigns an owned surface rather than prematurely fixing owned files, keeping parallel orchestration strong while preserving executor judgment. Updated SKILL.md, plugin metadata, and README (en/ja).
+
+## 0.8.4
+
+- **Make Codex `create_thread` write fan-out a chosen mechanism, not a parenthesized fallback.** The consolidated skill still produced goals that put `create_thread` behind an `or` clause after `spawn_agent`, so Codex could read thread fan-out as optional and run serially or use subagents for write work. The Codex parallel section now makes the drafter choose the write mechanism before emitting the goal: non-trivial separable write units in an established Codex project must be `create_thread` worktree units, one thread per unit, each child prompt carrying owned files, evidence, integration contract, and a unit-scoped goal instruction. `spawn_agent` stays the default for read-only research/review/final verification, and write fallback is allowed only when explicitly justified. Updated SKILL.md and README (en/ja).
+
+## 0.8.3
+
+- **README audit: remove stale terminology after the 0.8.0 consolidation (en/ja).** Swept both READMEs for descriptions that no longer match the skill. Fixes: "drafts and audits the condition" → "runs a readiness check" (the scored audit was retired in 0.8.0); `create_thread`/`spawn` → `create_thread`/`spawn_agent` (the actual tool name); the Codex parallel description now states that each `create_thread` carries its own unit-scoped goal set by the orchestrator (the per-thread goal that real runs proved matters); and the "fresh-context check" framing — which the skill dropped because Codex ignores it — is replaced by an explicit "spawn a read-only subagent to verify; do not self-review" in both the example goal and the feature bullets. The example goal's stated length was recomputed (1,352 → 1,343 characters) to match the refreshed verification line. No skill or manifest behavior change; docs only, plus version bump.
+
+## 0.8.2
+
+- **Make Claude Code's parallel fan-out explicit in the goal, not assumed.** The skill said Claude Code "fans out on its own judgment — no extra trigger," so the emitted goal carried only the decomposition structure and relied on the model spontaneously launching a dynamic workflow — asymmetric with Codex, which gets explicit tool imperatives, and a real risk of going serial. The goal now carries a runtime-agnostic instruction to "fan the units out in parallel and then synthesize": Claude Code realizes it as a dynamic workflow, Codex via its tools, and neither is left implicit. The mechanism is still left to the run (the goal describes structure + fan-out, not how). Updated SKILL.md and README (en/ja).
+
+## 0.8.1
+
+- **Align plugin manifests with the 0.8.0 consolidation (Claude Code + Codex).** Both `plugin.json` descriptions still said "a readiness audit" — stale after the 30-item scored audit became an inline readiness check. Updated both to "a readiness check" and added "fresh-context verification" to the listed features. No structural change: the Claude Code plugin (`.claude-plugin/`) already serves the consolidated single-file skill from root `skills/goal-setter/`, and both marketplace manifests were already clean.
+
+## 0.8.0
+
+- **Consolidated to a single skill.** `goal-setter` is now one self-contained `SKILL.md` (plus the `validate_goal_length.py` helper and `agents/openai.yaml`). The lean rewrite became the skill: the `goal-setter-lean` companion is removed, and the heavy reference set is retired — `references/goal-contract.md`, `runtime-capabilities.md`, `sidecars-and-notes.md`, `GOAL.template.md`, `execution-notes.template.md`, and the `init_goal_run.py` / `check_python_syntax.py` scripts are all gone. Why: the lean rewrite already carried every behavior-changing rule (intended-outcome image, anti-gaming, discriminating evidence, fresh-context verification with the Codex-concrete subagent imperative, the full verified Codex/Claude Code parallel mechanics, length discipline, lightweight execution-notes); the reference set was mostly elaboration and the sidecar apparatus, and maintaining two parallel skills (each mirrored) was a real cost — it had already caused a regression. One skill also ends the trigger ambiguity of two goal-setters matching the same request.
+- **What changed for users:** the skill keeps lightweight `execution-notes.md` for long runs but drops `GOAL.md` sidecar scaffolding (run IDs, the init script) and the 30-item scored readiness audit (replaced by the inline readiness check). The active `/goal` is the contract. Footprint: ~81K across six files → ~11K in one. Updated README (en/ja) structure and links; both manifests to 0.8.0.
+
+## 0.7.7
+
+- **`goal-setter-lean`: add lightweight execution-notes guidance and bundle the length helper.** Two things the lean skill had dropped that earn their keep: (1) on long autonomous runs, a concise `execution-notes.md` (progress checkpoints + the mid-run decisions made and why, for resume and audit) is genuinely useful — added as a Run-rules clause, without the full sidecar machinery (no `GOAL.md`, run IDs, or init script; the active `/goal` is the contract). (2) Bundled `scripts/validate_goal_length.py` into the lean skill so length is checked deterministically (codepoints vs UTF-16) rather than estimated. Updated the description and length clause accordingly; the full `goal-setter` still owns the readiness rubric and `GOAL.md` run scaffolding.
+
+## 0.7.6
+
+- **Two subagent-framing fixes.** (1) **Subagents aren't read-only only.** Read-only is the main use, but `spawn_agent` is also the write worker for units with cleanly partitioned files (and the write fan-out path whenever `create_thread` is unavailable). The runtime-capabilities §Subagents section and goal-contract had narrowed it to read-only; corrected both. (2) **The goal must explicitly instruct subagent use, or Codex runs in-context.** This "don't omit the authorization" rule existed in runtime-capabilities and the bloat-pass item, but goal-contract framed it as "mainly shapes Claude Code" (which underplays it — it's *required* on Codex), and the 0.6.3 debloat had dropped it from SKILL.md entirely. Restored an explicit SKILL.md bullet, fixed the goal-contract framing, and added the principle to goal-setter-lean: a goal silent on subagents — or granting only abstractly ("use subagents") — runs everything in-context; name the tool and action imperatively.
+
+## 0.7.5
+
+- **Make the `create_thread` write directive as explicit as the subagent one.** The read-only verification clause names the tool imperatively and pairs it with "do not self-review"; the write fan-out clause named `create_thread` (with worktree + per-thread goal) but lacked the matching anti-fallback, so Codex could quietly build the units serially in the main thread. Added the explicit imperative "for each write unit, open a separate thread with `create_thread` (own worktree, a goal scoped to that unit) and run them in parallel" plus the anti-serial clause "do not implement the units one-by-one in the main thread" — across runtime-capabilities (the principle), the goal-contract reference shape, GOAL.template, and goal-setter-lean.
+
+## 0.7.4
+
+- **The final-verification clause now names the subagent on Codex, instead of saying "fresh-context check."** The skill already knew (runtime-capabilities) that on Codex the words "fresh-context check" / "independent review" read as in-context self-work and launch no subagent — yet several Done clauses still used exactly that soft phrasing: GOAL.template's goal body, the goal-contract Done-When item, the Coverage note, and goal-setter-lean's Done + readiness check. Only the reference shape had the concrete form. Aligned them all: on Codex, the verification is written as the imperative "spawn a read-only subagent (`spawn_agent`) to verify the evidence; do not self-review," with a note that the bare phrase launches nothing. The concept label "fresh-context verification" stays where it names a contract element; the *emitted* verification directive is now concrete.
+
+## 0.7.3
+
+- **Restore the per-thread goal — each `create_thread` gets its own unit-scoped goal.** The debloat (0.6.3) accidentally dropped "its own goal scoped to the unit" from every skill — `create_thread` directives only said "own worktree." But a spawned thread needs a goal to run autonomously, and the orchestration model is precisely: the human sends the top-level `/goal`, the main thread (orchestrator) sets each parallel thread its own goal scoped to that unit and integrates the results. Restored this in runtime-capabilities, the goal-contract reference shape, GOAL.template, and goal-setter-lean. This is a load-bearing part of the Codex parallel pattern, not a detail.
+
+## 0.7.2
+
+- **`goal-setter-lean`: tell the user that *their* sending the `/goal` line is what fires Codex parallelism.** The lean skill instructed emitting the `/goal` line for the user to send but did not, like the full skill's Output Style, instruct the assistant to flag *why* the human must send it. Since Codex's `spawn_agent`/`create_thread` start only from the user's own typed request, an auto-set goal — or one the user reads but never sends — runs fully serial. Marked this the linchpin and made the assistant tell the user plainly. This is the most common real-world failure point, so it earns the explicit line.
+
+## 0.7.1
+
+- **`goal-setter-lean`: make the Codex parallel directive demonstrably land in the goal text.** The 0.7.0 lean skill stated the subagent/`create_thread`/bootstrap rules as prose, which could be read as background about how Codex works rather than text to embed in the emitted `/goal` line. Restated them as "text to embed, not background," broke them into a list, and added a concrete worked example of the line the goal carries — matching how the full skill's reference shape proves the directive is embedded. No behavior intended beyond removing that ambiguity.
+
+## 0.7.0
+
+- **New companion skill: `goal-setter-lean`** (`plugins/goal-setter/skills/goal-setter-lean/`). A single-file, reference-free compression of goal-setter — ~9.5K vs the full skill's ~79.5K (about 1/8). It keeps the parts that change behavior beyond a model's defaults: the intended-outcome image gate, the contract elements with the domain-specific validation heuristics, binary evidence-bounded Done with fresh-context verification, the verified Codex/Claude Code parallel mechanics (user-sent `/goal` line, subagents as default worker, `create_thread` only with a resolvable `projectId`, bootstrap before write fan-out), length discipline, and a compressed readiness check. It drops sidecar mode and the 30-item rubric — for durable audit/resume and the full reference set, the original `goal-setter` skill remains. Ships with the Codex plugin (the manifest's `skills: ./skills/` auto-loads it).
+
+## 0.6.5
+
+- **AI-slop sweep.** Ran a machine sweep for filler clichés, decorative intensifiers, rhetorical tells, and duplicated evidence tags across all skill files. After the 0.6.3 debloat there was little left: no clichés ("delve / realm / tapestry / it's worth noting" → none), no decorative triplets. Removed a duplicated "(verified: the executor reported it needs a projectId…)" parenthetical in runtime-capabilities (the same evidence sat ten lines above) and one filler "actually" in SKILL.md. Deliberately kept the "genuinely / actually" usages that distinguish real-vs-nominal ("genuinely not discoverable", "the boundaries this task could actually break") — those carry meaning; cutting them to hit a quota would weaken the rule, not remove slop.
+
+## 0.6.4
+
+- **Less over-specified goals: paths earn their place, and the `Context:` label is now optional.** Two refinements to the emitted goal's style:
+  - **Paths/identifiers.** Sharpened the §Context to Read First rule: a path earns a place in the Goal only when it is the scope boundary or evidence surface, or is genuinely not discoverable — the executor can find files, so pre-loading them is "how" leaking into a "what" contract, and enumerated paths go stale when files move. Otherwise name one or two anchors plus a discovery rule. (Scope-boundary paths still stay — the rule trims decorative enumeration, not load-bearing scope.)
+  - **`Context:` label optional.** The one-line opener (what the outcome serves and for whom) still opens every goal — it measurably helps long runs tie tradeoffs to intent — but the literal `Context:` label is no longer mandated. Lead with the intent in plain prose; add the label only if the opener might be misread as a requirement (rare, since the evaluator keys on the Done clause). This aligns the opener with the skill's own "prose, not labeled fields" principle. Updated goal-contract (must-cover, Intended Outcome Image, reference shape), GOAL.template, and the README (en/ja) design note; the README's real-run example keeps its `Context:` label, now framed as the optional case.
+- Verified the SKILL.md reference graph: all eight cited files exist and every reference/script is reachable from SKILL.md (no orphans, no dangling cites).
+
+## 0.6.3
+
+- **Debloat pass — remove duplication, keep behavior.** The parallel/Codex guidance accumulated across 0.6.0–0.6.2 had the same fan-out rules spelled out in full across all of SKILL.md, goal-contract, runtime-capabilities, and GOAL.template. A fresh-eyes audit found ~5 full copies of one idea. Fixes, all behavior-preserving (canonical copy kept intact):
+  - **`references/runtime-capabilities.md` §Parallel Fan-out is now the single home** for the Codex subagent/`create_thread`/bootstrap mechanics. goal-contract's §Core Shape and SKILL.md's Inline-Goal bullet collapse to short pointers; the giant readiness-audit decomposition item shrinks to one line.
+  - **goal-contract.md −12%** (38.8K→34K): removed the internal triple-statement of the decomposition structure, stripped meta-justification tails ("measurably suppresses…", "Long-horizon models occasionally…", "fresh-context verifiers outperform…"), trimmed the reference-shape placeholder, and merged duplicate audit items.
+  - **SKILL.md −1.3K**: dropped the "Two rules bear repeating" duplication and the 700-char Codex paragraph (now a pointer); trimmed the read-gate trigger list.
+  - Fixed a wording inconsistency: the length budget is an "ordinary ceiling" of 2,500, not a "target" (one audit line still said "target").
+- No rule changed — only restatements were cut. `GOAL.template.md` (the self-contained goal body) and the canonical reference keep their full text by design.
+
+## 0.6.2
+
+- **Correct the Codex parallel model from a real from-scratch run, and simplify it.** Running 0.6.1 on an empty workspace surfaced two things. The Phase 0 bootstrap rule worked — the executor grounded itself (empty dir, git uninitialized, Node/pnpm available) and built the baseline in the main thread before fanning out, exactly as intended. But it also showed that **`create_thread` genuinely requires a resolvable `projectId`** and cannot be cut on a fresh/empty workspace (the executor reported "create_thread needs a projectId"), which **reverses the 0.6.1 line that said a non-visible `projectId` is not a reason to skip `create_thread`** — that guidance was wrong. The corrected, simpler model:
+  - **Subagents (`spawn_agent`) are the default parallel worker** on Codex — always available, used for read-only work *and* for write units whose files are cleanly partitioned. The earlier rigid "read-only → subagent / write → create_thread" split is gone.
+  - **`create_thread` is a worktree upgrade, only when an established project exists** (it needs a `projectId`). Reserve it for write units that must touch shared files; otherwise partition the files and use subagents.
+  - **Name the tool, not its arguments** (kept from 0.6.1): never write `projectId`/`target.type`/schema fields — a non-visible `projectId` reads as "cannot create a thread" and the run silently falls back to serial.
+  - **Bootstrap first / phase 0** (kept from 0.6.1): on an empty or non-git workspace the main thread does git init + build/test scaffold + committed cross-module interface contracts before any write fan-out.
+- Collapsed the now-overlapping parallel guidance into one set of three Codex rules across SKILL.md, goal-contract, runtime-capabilities, GOAL.template, and README (en/ja); trimmed the duplication that had accumulated across 0.6.0–0.6.1. No unverified mechanism claims (whether `create_thread` becomes available after phase-0 commit is left for the runtime to resolve, not asserted).
+
+## 0.6.1
+
+- **Fix the Codex parallel-avoidance failure: write fan-out silently fell back to serial.** A real from-scratch game build produced a correct `create_thread` directive, but the executor still ran serially. Two causes, both now addressed in the Goal text the skill emits:
+  - **Tool, not arguments.** The executor introspected for a `projectId`, could not see one (it had a workspace path, not a UUID), read that as "cannot create a thread", and quietly dropped to serial. The directive must name the *tool* (`create_thread`, "own worktree", "main thread integrates") but never tool-schema fields (`projectId`, `target.type`, `environment.type`); it now instructs Codex to create threads **in the current project/workspace** and let the runtime resolve the location — a non-visible project id is not a reason to skip fan-out.
+  - **Bootstrap before fan-out (phase 0).** Parallel write worktrees need a shared committed baseline first; on an empty or non-git workspace `create_thread` worktrees cannot be cut at all, and even with git, fanning out before the skeleton is committed makes every thread reinvent or collide on it. For from-scratch/empty workspaces the Goal now states the ordering: the main thread first initializes git, stands up the build/test scaffold, and commits the cross-module **interface contracts** (phase 0), then `create_thread` fans out against that fixed baseline.
+- Updated SKILL.md, goal-contract (parallel guidance + readiness audit), runtime-capabilities, and GOAL.template. Distinguishes what the skill controls (Goal wording) from executor caution it can only mitigate. No new unverified mechanism claims (`projectId`-accepts-a-path stays out).
+
+## 0.6.0
+
+- **Parallel fan-out is now tool-by-work-type and phased, on both runtimes.** Earlier versions treated `create_thread` as the single Codex parallel path; that was wrong for read-only work. The corrected model: **read-only work** (research, multi-aspect review, adversarial/final verification) fans out with **subagents** (lightweight, no worktree); **write work** (parallel implementation) uses **`create_thread`** (each unit in its own git worktree, so concurrent writes do not collide — heavyweight, reserved for genuine parallel write units). Large work is shaped as a **phased pipeline**: (1) parallel read-only research to clarify scope and open questions → (2) parallel write implementation → (3) integrate → (4) parallel adversarial/final verification. On **Claude Code** this runs as a dynamic workflow (subagents for read-only stages, worktree isolation for write stages) on the model's own judgment. On **Codex** both `spawn` and `create_thread` are gated to the user's own typed request, so for decomposable work the skill emits a `/goal …` line — naming each tool concretely and imperatively (no hedge words) — for the user to send; that one send authorizes the whole cascade. Corrected the prior "create_thread for everything" / "open a fresh read-only create_thread to verify" claims (read-only verification is a subagent) across SKILL.md, goal-contract, runtime-capabilities, GOAL.template, and README (en/ja).
+
+## 0.5.0
+
+- **Codex parallelism: the human sends the `/goal` line; the skill no longer auto-sets it.** The missing variable behind all the earlier flip-flopping turned out to be *who typed the directive*, not Goal-text-vs-prompt. Codex's `create_thread`/`spawn` are gated to an explicit user request: they fire when the human types `/goal <…create_thread per unit…>` (verified — this is what launched threads earlier), and are declined when goal-setter auto-sets the same goal via `create_goal` (the runtime states create_thread is "only when the user explicitly asks"). So for decomposable work on Codex, goal-setter now **emits the `/goal …` line for the user to send instead of auto-setting it** — that one human action authorizes the whole cascade: the main thread creates a thread per unit (own worktree, its own goal set by the orchestrator), uses subagents where useful, and integrates. Ordinary (non-decomposable) Codex goals still auto-set via `create_goal`. Updated SKILL.md (activation rule + Activate Mode + parallel rule), goal-contract, runtime-capabilities, and README (en/ja).
+
+## 0.4.1
+
+- **Forbid hedging the Codex `create_thread` directive — it was the reason parallelism still didn't fire.** A real run on 0.4.0 produced a goal that *did* contain a `create_thread` directive, but hedged: "decomposable by system only when file ownership is separable … use create_thread per independent system unit **when useful**." Codex reads "when useful" / "only when …" as an out and runs serially — the same failure as the original permissive `spawn` clause. Decomposability is now explicitly the drafter's *draft-time* judgment, not a runtime condition: once goal-setter judges the work decomposable, the goal must command the fan-out as a **flat imperative** with no "when useful" / "if appropriate" / "only when …" qualifiers. The "decompose only when …" conditions are a pre-draft checklist, not text for the goal. Enforced in SKILL.md, goal-contract, runtime-capabilities, and the readiness audit. Flexibility stays where it belongs — game/algorithm/implementation design — while the orchestration directive itself is unconditional.
+
+## 0.4.0
+
+- **Codex parallelism is goal-driven via `create_thread` — re-verified and corrected.** 0.3.0 concluded that Goal text cannot trigger Codex parallelism; that was tested only with a permissive `spawn`-subagent clause. Re-tested in the Codex App: an **imperative `create_thread` directive in the Goal body launches parallel threads autonomously** (no user prompt). So:
+  - For decomposable work — a multi-module build, a multi-aspect review, or multi-topic research — the Goal carries the structure (discovery rule, per-unit owned surface and evidence/deliverable, integration/synthesis check) **plus** a runtime-sized launch directive.
+  - **Codex default is now `create_thread`** (the analog of Claude Code's dynamic workflow): an imperative "for each unit, open a separate thread in its own worktree, set it a goal scoped to its unit, run in parallel, then integrate in the main thread, autonomously." The `spawn` subagent tool is gated by the environment to explicit user requests, so it is demoted to a user-prompt-only fallback.
+  - **Claude Code** continues to fan out via a dynamic workflow on its own judgment.
+  - Corrected the now-false claims (added in 0.3.0) that Goal text cannot trigger Codex parallelism — across `SKILL.md`, goal-contract, runtime-capabilities, GOAL.template, and README (en/ja).
+- Added a parallel/decomposition starter example to the plugin default prompts (Codex plugin manifest and `agents/openai.yaml`).
+
+## 0.3.0
+
+- **Corrected the Codex parallel model from real-run verification.** Earlier versions tried to make Codex spawn parallel agents by writing the grant into the goal text (0.2.0 self-gating, 0.2.1 affirmative). Verified against the Codex App and OpenAI's docs, that does not work: a Codex goal is sequential and thread-scoped, and subagents and `create_thread` launch **only on an explicit user request in the prompt**, never from goal text. Accordingly:
+  - The goal now carries decomposition **structure** only — a discovery rule for the independent units (state the rule, do not enumerate pieces unknown at draft time), an owned surface and its own Done evidence per unit, item-by-item progress, and a parent integration check over the merged result. This is runtime-agnostic and valuable even with no parallelism.
+  - Parallel **execution** is a separate, runtime-specific layer: Claude Code fans out via a dynamic workflow on its own judgment; on Codex, goal-setter hands the user a short paste-line to send as their own prompt — `spawn` subagents (orchestrated workers, results collected by the main agent, no separate goals) or `create_thread` (genuinely separate threads, each with its own goal and optional worktree).
+  - Removed the false claims that goal text grants or triggers Codex subagents (README, `SKILL.md`, goal-contract, runtime-capabilities, GOAL.template). The goal documents intended delegation, but on Codex the user triggers it.
+
+## 0.2.1
+
+- **Fix — parallel-spawn grant now actually lands in the emitted goal.** The earlier self-gating conditional ("may fan out if useful") was dropped by the bloat pass and read as optional execution advice, so goals shipped with only the read-only subagent clause and Codex never spawned parallel agents. Decomposition is now drafter-gated: when the work splits into independent, separately verifiable, share-no-state pieces, the goal carries an explicit, affirmative spawn instruction (Codex: one `create_goal` child contract per piece; Claude Code: a dynamic workflow), enforced by a readiness-audit item; non-decomposable work omits it. The read gate also widened so multi-module/multi-item/multi-target work consults the runtime guidance instead of skipping it.
+
+## 0.2.0
+
+Initial release.
+
+- **Skill**: image-first goal intake for long autonomous runs
+  - Intended Outcome Image gate: reconstruct what/why before drafting; mirror back for one-pass correction on minimal prompts; a one-line context note (what the outcome serves and for whom) opens every goal
+  - Clarification and bounded exploration gates
+  - Compact contract output (shortest that changes behavior — typically 800-1,800 chars, ceiling 2,500; governance clauses scale with run length and risk): objective, evidence surface, task-instantiated constraints (1-3 concrete boundaries, no boilerplate denylists), anti-gaming rule, validation, explicit subagent authorization with fresh-context verification before Done, evidence-audited progress reporting, persistence rule, progress/pivot rules, binary Done, block conditions, final report rule
+  - Contract shape tuned for frontier models (GPT-5.5 / Claude Fable 5 prompting guides): the shape is adaptable per task, numeric triggers are tunable defaults, decision criteria over enumerations
+  - Research goals: evidence budget and absence-vs-negation rules
+  - Preliminary-goal pattern: when the outcome cannot be measured yet, the first goal builds the verification surface (rubric, eval + baseline, checklist, reproduction); the main goal follows it
+  - Domain quantification heuristics: bugs (failing-then-passing), performance (metric/threshold/method/runs), research (decision + evidence standard), migrations (verified counts + coverage bound), operations (healthy state + rollback trigger)
+  - Goal readiness audit (0/1/2 scoring, n/a allowed) before activation
+  - Verification-findings disposition (blocking findings fix, the rest fix-or-record at the executor's discretion), discriminating-evidence rule (each outcome class fires; a check that could not have failed proves nothing), and final-report disclosure of decisions the goal left undefined — all framed as delegated discretion and evidence bars, not implementation constraints, from real-run feedback
+  - Deterministic length validator (`scripts/validate_goal_length.py`) matching the real runtime limits — Codex counts Unicode codepoints, Claude Code counts UTF-16 code units (verified against Codex source and Claude Code 2.1.173); validate-once discipline: pass means activate, fail means restructure, never iterative trimming loops
+  - Parallel decomposition (runtime-aware): goal-setter now writes goals that, on Codex, spawn separate parallel agents — each delegated agent driven by its own `create_goal` child contract; on Claude Code the same goal fans out through a dynamic workflow. Fires only when the work splits into independent, separately verifiable sub-outcomes that share no state, with owned surfaces, a parallel cap, and a parent integration gate; the grant self-gates so it stays harmless on interlocking work (refactors, single-cause bugs, serially tuned metrics)
+  - Sidecar mode (`GOAL.md` + `execution-notes.md`) for day-scale runs with durable audit/resume
+  - Checkpoint reporting and final report in the user's language
+  - SKILL.md kept to routing, modes, and gates (88 lines); contract detail lives in gated references (progressive disclosure per skill-creator practice)
+- **Runtimes**: Codex (native goal-tool activation via `create_goal`) and Claude Code (emits exact `/goal` line) from a single skill
+- **Distribution**: Codex plugin marketplace metadata uses the standard `.agents/plugins/marketplace.json` -> `./plugins/goal-setter` layout, with the plugin manifest and vendored skill under `plugins/goal-setter/`; skill-only installs still use the root `skills/goal-setter/`; Claude Code plugin metadata remains in `.claude-plugin/`
+- **Docs**: README hero icon added as a text-free Goal Setter app icon under `assets/`
