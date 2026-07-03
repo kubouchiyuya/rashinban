@@ -1,85 +1,112 @@
 <div align="center">
 
-# 羅針盤 / Rashinban
+# 🧭 羅針盤 / Rashinban
 
-### A compass for autonomous agent goals — turn a rough request into a linted, verifiable `/goal`.
+**A compass for autonomous agent goals — turn a rough request into a linted, verifiable `/goal`.**
 
+Because the one thing that decides a long agent run is whether *"done"* was ever
+defined.
+
+[![CI](https://github.com/kubouchiyuya/rashinban/actions/workflows/ci.yml/badge.svg)](https://github.com/kubouchiyuya/rashinban/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
 [![Based on goal-setter](https://img.shields.io/badge/based%20on-goal--setter%20by%20gotalab-black.svg)](https://github.com/gotalab/goal-setter-skill)
-[![Every agent](https://img.shields.io/badge/Codex%20%7C%20Claude%20%7C%20Grok%20%7C%20OpenAI%20%7C%20Gemini-black.svg)](skills/rashinban/adapters/ROUTING.md)
+[![deps](https://img.shields.io/badge/deps-zero%20(python%20stdlib)-black.svg)](#-quick-start)
+[![Agents](https://img.shields.io/badge/Codex%20%7C%20Claude%20%7C%20Grok%20%7C%20OpenAI%20%7C%20Gemini-black.svg)](skills/rashinban/adapters/ROUTING.md)
 
-日本語版は [README.ja.md](README.ja.md)
+[日本語](README.ja.md) · [Guide](docs/GUIDE.md) · [How it works](docs/HOW-IT-WORKS.md)
 
 </div>
 
-> **Attribution.** Rashinban is a **harness-engineered derivative** of
-> [goal-setter-skill](https://github.com/gotalab/goal-setter-skill) by **gotalab**,
-> under its original **MIT License**. The goal-contract spec is gotalab's;
-> Rashinban adds a deterministic harness around it. See [NOTICE.md](NOTICE.md).
-
 ---
 
-## What it is
+> **Attribution.** Rashinban is a harness-engineered **derivative** of
+> [goal-setter-skill](https://github.com/gotalab/goal-setter-skill) by **gotalab**
+> (MIT). The goal-contract spec is gotalab's; Rashinban adds the harness. See
+> [NOTICE.md](NOTICE.md).
 
-A **meta-skill**: it does not implement your task — it turns a rough request into
-a compact `/goal` that states the outcome, how Done is verified, what must not
-break, and when to stop, so an AI agent (Codex, Claude Code, Grok, OpenAI,
-Gemini…) can run **until a verifiable outcome is true**.
-
-Upstream goal-setter is essentially one very good prompt. **Rashinban wraps it in
-a harness:**
-
-| Added | What it does |
-|---|---|
-| `scripts/goal_lint.py` | Quality gate — checks the contract *elements* (objective / evidence / Done / validation / constraints / block), flags vague "better/works" and task-list-as-Done, scores 0-100, and enforces the real 4,000-char runtime cap (Codex codepoints + Claude Code UTF-16). |
-| `bin/rashinban` | Host-aware CLI — `lint`, `host`, `activate` (emits the `/goal` line + runtime-correct guidance), `bridge`, `selfcheck`. |
-| `scripts/goal_seek_bridge.py` | Drops the goal into AKATSUKI `plans-store` (`rashinban-inbox.jsonl`, non-destructive) for goal-seek. |
-| `references/` | `templates.md` (ready `/goal` skeletons), `validation-playbooks.md` (per-domain "verified" means), `adapters/ROUTING.md` (cross-runtime activation). |
-| `tests/smoke.sh` | Offline assertions: good goal passes, weak goal is flagged, over-cap fails. |
-
-## Quickstart
+Tell an AI to *"make the app better"* and let it run, and it wanders — it polishes
+the wrong thing, stops too early, or declares victory on a demo that doesn't work.
+**Rashinban is the step that stops that.** It turns a rough request into a `/goal`:
+a short contract stating the outcome, how it's verified, what must not break, and
+when to stop — so an agent runs **until a verifiable result is true**, then reports
+honestly.
 
 ```bash
-python3 skills/rashinban/scripts/goal_lint.py my-goal.md      # lint a drafted /goal
-python3 skills/rashinban/bin/rashinban activate my-goal.md    # lint + emit the /goal line
-python3 skills/rashinban/bin/rashinban selfcheck
-sh tests/smoke.sh
+python3 skills/rashinban/bin/rashinban activate my-goal.txt
+#   lints the draft, then prints the /goal line + runtime-correct guidance
 ```
 
-Lint output names missing core elements and weak phrasing, and scores the draft.
-A good score is not a good Goal by itself — it means the contract is *well-formed*.
+## ✨ Key capabilities
 
-## How activation works (it rides the runtime, no scheduler)
+- **Lints a goal, doesn't just count characters.** `goal_lint.py` checks the
+  contract *elements* (objective / evidence / Done / validation / constraints /
+  stop), flags vague "better/works" and task-list-as-Done, and scores 0-100.
+- **Knows your runtime.** `rashinban activate` detects Codex / Claude Code / Grok
+  / OpenAI / Gemini / Cursor and tells you exactly how to activate the goal there.
+- **Bridges into goal-seek.** Inside AKATSUKI, `rashinban bridge` files the goal
+  into `plans-store` — non-destructively (the SoT is never edited directly).
+- **Enforces the real length cap.** 4,000 chars, counted the way each runtime
+  actually counts (Codex codepoints, Claude Code UTF-16). Both are reported.
+- **Zero dependencies.** Pure Python stdlib.
 
-| Runtime | Activation |
+## 🚀 Quick start
+
+```bash
+# as a Claude Code plugin
+claude plugin marketplace add kubouchiyuya/rashinban
+claude plugin install rashinban
+
+# or clone and use the scripts directly
+python3 skills/rashinban/scripts/goal_lint.py my-goal.txt     # grade a drafted /goal
+python3 skills/rashinban/bin/rashinban activate my-goal.txt   # lint + emit the /goal line
+sh tests/smoke.sh                                             # 6 offline assertions
+```
+
+A weak draft scores low and names what's missing:
+
+```text
+rashinban goal-lint — score 22/100
+  elements: -objective, -evidence, -done, +validation, -constraints, -block
+  MISSING core: Objective; Evidence / verification surface; Done (pass/fail condition)
+  warning: vague success term ("better/works") with no concrete check named
+```
+
+> **Tip:** a high score means the contract is *well-formed*, not that the goal is
+> *good*. Judgment still yours.
+
+## 🧭 How it works
+
+Rashinban has two halves: the **contract spec** (gotalab's goal-setter, preserved
+in `skills/rashinban/SKILL.md`) and the **harness** (`goal_lint.py`,
+`bin/rashinban`, `goal_seek_bridge.py`, `references/`, `tests/`). It writes and
+checks goals; it does *not* schedule anything — it rides each runtime's native
+goal mechanism. Deep dive → [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md).
+
+### The Codex linchpin
+`spawn_agent`/`create_thread` are gated to explicit user requests. If a goal
+needs them, Rashinban returns the `/goal` line for **you** to send — sending it
+is what authorizes those tools. It never claims a goal was set unless it was.
+
+## 🧪 Testing / CI
+
+| Command | Purpose |
 |---|---|
-| **Codex**, no worker tools | native goal tool may set it |
-| **Codex**, needs `spawn_agent`/`create_thread` | **you** send the `/goal` line — that is what authorizes those tools |
-| **Claude Code** | send the `/goal` line; can fan out as a dynamic workflow |
-| **Grok / OpenAI / Gemini / Cursor** | send the `/goal` line; keep run/stop rules in the contract |
+| `sh tests/smoke.sh` | 6 offline assertions: good goal passes, weak goal is flagged, over-cap fails, CLI emits the `/goal` line |
+| GitHub Actions (`ci.yml`) | runs lint + smoke on every push — the badge above is the proof |
 
-Details: [skills/rashinban/adapters/ROUTING.md](skills/rashinban/adapters/ROUTING.md).
+## 🔗 Related projects
 
-## The contract Rashinban writes
+- 🛡️ **[狛犬 / Komainu](https://github.com/kubouchiyuya/komainu)** — a clone/install
+  guardian that vets any repo/skill/plugin before your AI touches it. Komainu
+  guards what comes *in*; Rashinban aims where you're *going*.
 
-Objective (one verifiable end state) · Evidence/verification · Core flow &
-pass-fail checks · Read-first anchors · Constraints & boundaries · Validation
-(per-domain) · Done (pass/fail, evidence-bounded, risk-matched review) · Run
-rules · Block/stop · Final report. Full spec: [skills/rashinban/SKILL.md](skills/rashinban/SKILL.md).
+## 🤝 Contributing
 
-## Documentation
+[CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) ·
+[SECURITY.md](SECURITY.md) · [Docs](docs/GUIDE.md)
 
-| Doc | What it covers |
-|---|---|
-| [docs/GUIDE.md](docs/GUIDE.md) | plain-language guide (for non-engineers and AI users) |
-| [docs/QUICKSTART.md](docs/QUICKSTART.md) | install, lint, activate, bridge in minutes |
-| [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md) | the contract, the lint, the CLI, per-runtime activation, honest limits |
-| [docs/FAQ.md](docs/FAQ.md) | common questions |
-| [skills/rashinban/references/](skills/rashinban/references/) | templates · validation playbooks · routing |
-| 日本語 | [README.ja.md](README.ja.md) · [docs/GUIDE.ja.md](docs/GUIDE.ja.md) |
-
-## License & credit
+## 📜 License & credit
 
 MIT — see [LICENSE](LICENSE) (Copyright gotalab). Rashinban is an independent
-derivative and is **not affiliated with or endorsed by** gotalab. For the
-canonical goal-setter, use the [upstream repo](https://github.com/gotalab/goal-setter-skill).
+derivative, **not affiliated with or endorsed by** gotalab. For the canonical
+goal-setter, use the [upstream repo](https://github.com/gotalab/goal-setter-skill).

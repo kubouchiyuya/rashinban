@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/kubouchiyuya/rashinban/security/advisories/new
+    about: Please report security issues privately, not as a public issue.
+  - name: Documentation
+    url: https://github.com/kubouchiyuya/rashinban/blob/main/docs/GUIDE.md
+    about: Read the guide, quickstart, how-it-works, and FAQ.
+  - name: Upstream goal-setter (gotalab)
+    url: https://github.com/gotalab/goal-setter-skill
+    about: The canonical project Rashinban derives from.
