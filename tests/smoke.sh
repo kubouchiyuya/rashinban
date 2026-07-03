@@ -31,6 +31,12 @@ echo "[4] CLI activate emits /goal line for a good goal"
 python3 "$ROOT/skills/rashinban/bin/rashinban" activate "$FIX/good_goal.txt" 2>/dev/null | grep -q '^/goal ' \
   && ok "activate emits /goal line" || no "no /goal line"
 
+echo "[5] --min-score CI gate"
+python3 "$LINT" "$FIX/good_goal.txt" --min-score 70 >/dev/null 2>&1
+[ "$?" = "0" ] && ok "good goal passes --min-score 70" || no "good goal failed gate"
+python3 "$LINT" "$FIX/weak_goal.txt" --min-score 70 >/dev/null 2>&1
+[ "$?" = "4" ] && ok "weak goal fails --min-score 70 (exit 4)" || no "weak goal exit $? not 4"
+
 echo ""
 echo "RESULT: pass=$pass fail=$fail"
 [ "$fail" = "0" ]

@@ -12,8 +12,9 @@ Usage:
   cat goal.md | goal_lint.py -     # stdin
   goal_lint.py <file> --json       # machine-readable
   goal_lint.py <file> --strict     # exit nonzero on any missing core element
+  goal_lint.py <file> --min-score 70   # CI gate: exit nonzero if score < 70
 
-Exit: 0 ok · 1 length over cap (hard) · 2 usage · 3 missing core element (--strict)
+Exit: 0 ok · 1 length over cap (hard) · 2 usage · 3 missing core (--strict) · 4 below --min-score
 
 Based on goal-setter-skill by gotalab (MIT); length rules verified against
 Codex (Unicode codepoints) and Claude Code (UTF-16 code units), cap 4000.
@@ -90,7 +91,6 @@ TASKLIST = re.compile(r"\b(build|add|create|implement|write|make)\b[^.]*,[^.]*\b
 
 
 def element_report(obj: str) -> dict:
-    low = obj.lower()
     found, missing_core, warnings = {}, [], []
     for key, label, is_core, pats in ELEMENTS:
         hit = any(re.search(p, obj, re.IGNORECASE) for p in pats)
@@ -156,6 +156,8 @@ def main(argv=None) -> int:
     ap.add_argument("path", help="file path, or - for stdin")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--strict", action="store_true", help="exit 3 if a core element is missing")
+    ap.add_argument("--min-score", type=int, default=None,
+                    help="exit 4 if the score is below N (use in CI to gate goal quality)")
     a = ap.parse_args(argv)
     raw = sys.stdin.read() if a.path == "-" else Path(a.path).read_text("utf-8")
     obj = extract_objective(raw)
@@ -165,6 +167,8 @@ def main(argv=None) -> int:
         return 1
     if a.strict and rep["missing_core"]:
         return 3
+    if a.min_score is not None and rep["score"] < a.min_score:
+        return 4
     return 0
 
 

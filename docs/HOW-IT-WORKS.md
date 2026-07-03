@@ -36,6 +36,9 @@ weak phrasing, and scores 0-100.
   differently: Codex counts Unicode codepoints, Claude Code counts UTF-16 code
   units (emoji/rare CJK = 2). Lint reports both and fails on the stricter one.
 
+Use `--min-score N` to make it a **CI gate** (exit 4 if the score is below N), or
+`--strict` to fail on any missing core element.
+
 > A high score means the contract is *well-formed*, not that the goal is *good*.
 > Judgment still yours.
 
