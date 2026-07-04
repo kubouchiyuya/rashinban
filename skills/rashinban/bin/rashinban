@@ -4,7 +4,7 @@
 Turns a drafted /goal into a linted, host-aware, activatable contract, and can
 bridge it into AKATSUKI's plans-store for goal-seek. It authors and checks goal
 text; it does not implement a scheduler (it rides each runtime's native goal
-mechanism, like upstream goal-setter).
+mechanism).
 
 Commands:
   rashinban lint <file> [--json] [--strict]     quality + length gate
