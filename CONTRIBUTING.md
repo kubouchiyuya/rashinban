@@ -11,8 +11,7 @@ Thanks for helping aim agents at verifiable goals. Rashinban is small on purpose
 - **The lint is guidance, length is the gate.** A `/goal` is prose, so element
   checks are heuristic. Only the 4,000-char cap is a hard failure.
 - **Be honest.** A high lint score means *well-formed*, not *good*. Docs say so.
-- **Preserve attribution.** This is a derivative of goal-setter by gotalab (MIT);
-  keep `LICENSE` and `NOTICE.md` intact.
+- **Preserve attribution.** Keep `LICENSE` and `NOTICE.md` intact.
 
 ## Dev loop
 

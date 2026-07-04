@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rashinban goal-lint — quality gate for a compact /goal contract.
 
-Beyond length (the upstream goal-setter only checks characters), this lints the
+Beyond a raw length check, this lints the
 *contract elements* a good /goal should carry and flags vague or task-list-as-Done
 phrasing. Heuristic by design: a /goal is plain prose with no labeled fields, so
 this gives guidance and a score, not a hard pass/fail on structure. The ONLY hard
