@@ -8,7 +8,6 @@
 
 [![CI](https://github.com/kubouchiyuya/rashinban/actions/workflows/ci.yml/badge.svg)](https://github.com/kubouchiyuya/rashinban/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
-[![Based on goal-setter](https://img.shields.io/badge/based%20on-goal--setter%20by%20gotalab-black.svg)](https://github.com/gotalab/goal-setter-skill)
 [![deps](https://img.shields.io/badge/deps-zero%20(python%20stdlib)-black.svg)](#-クイックスタート)
 [![Agents](https://img.shields.io/badge/Codex%20%7C%20Claude%20%7C%20Grok%20%7C%20OpenAI%20%7C%20Gemini-black.svg)](skills/rashinban/adapters/ROUTING.md)
 
@@ -17,9 +16,6 @@
 </div>
 
 ---
-
-> **帰属.** Rashinban は [goal-setter-skill](https://github.com/gotalab/goal-setter-skill)
-> （gotalab・MIT）の**ハーネス強化派生**。契約仕様は gotalab のもの。[NOTICE.md](NOTICE.md) 参照。
 
 AI に「アプリを良くして」と言って自走させると迷走します — 違う所を磨く、早すぎる
 段階で止まる、実際は動かないデモで勝利宣言する。**羅針盤はそれを止める工程。**
@@ -35,8 +31,9 @@ python3 skills/rashinban/bin/rashinban activate my-goal.txt
 
 - **文字数だけでなくゴールを lint。** `goal_lint.py` が契約要素（目的/証拠/Done/検証/
   制約/停止）を確認、「better/works」等の曖昧さや"タスク列挙=Done"を指摘、0-100 で採点。
-- **ランタイムを知っている。** `rashinban activate` が Codex/Claude/Grok/OpenAI/
-  Gemini/Cursor を検出し、そこでの正しい活性化方法を教える。
+- **全ランタイムで動く。** `rashinban activate` が Codex / Claude Code / Grok /
+  Grok Build / Gemini / Antigravity / Cursor / GLM / DeepSeek / Hermes /
+  OpenClaw を検出。他の任意のエージェントも移植可能な `/goal` をそのまま実行。
 - **goal-seek へ橋渡し。** AKATSUKI 内で `rashinban bridge` が `plans-store` へ
   非破壊投入（SoT は直接触らない）。
 - **実ランタイムの長さ上限を強制。** 4,000字（Codex=codepoint / Claude=UTF-16）。両方報告。
@@ -67,7 +64,7 @@ rashinban goal-lint — score 22/100
 
 ## 🧭 仕組み
 
-契約仕様（gotalab の goal-setter・`SKILL.md`）＋ハーネス（`goal_lint.py`・
+契約仕様（`SKILL.md`）＋ハーネス（`goal_lint.py`・
 `bin/rashinban`・`goal_seek_bridge.py`・`references/`・`tests/`）の二層。ゴールを
 **書いて検査する**もので、スケジューラは作らない — 各ランタイムの native 機構に乗る。
 詳細 → [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md)
@@ -96,5 +93,4 @@ rashinban goal-lint — score 22/100
 
 ## 📜 ライセンス・クレジット
 
-MIT — [LICENSE](LICENSE)（Copyright gotalab）。独立派生・gotalab とは非提携。
-正規版は[上流リポジトリ](https://github.com/gotalab/goal-setter-skill)。
+MIT — [LICENSE](LICENSE) / [NOTICE.md](NOTICE.md) 参照。

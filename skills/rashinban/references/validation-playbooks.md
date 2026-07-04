@@ -2,7 +2,7 @@
 
 The `/goal` must name the *most relevant* validation, not every possible check.
 Per-domain, what "verified" concretely means. Extracted and expanded from the
-goal-setter contract spec (gotalab, MIT).
+/goal contract spec.
 
 | Domain | Concrete validation the /goal should require |
 |---|---|

@@ -1,7 +1,7 @@
 # How Rashinban works
 
 Rashinban has two halves: **the contract spec** (what a good `/goal` contains —
-gotalab's goal-setter, preserved in `skills/rashinban/SKILL.md`) and **the
+`skills/rashinban/SKILL.md`) and **the
 harness** (tooling that checks and activates it — added by Rashinban).
 
 ## The contract a `/goal` should carry
