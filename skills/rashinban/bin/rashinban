@@ -14,7 +14,6 @@ Commands:
   rashinban bridge <file> --title T [--id AKT-N] write the goal into plans-store
   rashinban selfcheck
 
-Based on goal-setter-skill by gotalab (MIT).
 """
 from __future__ import annotations
 

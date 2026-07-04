@@ -16,8 +16,8 @@ Usage:
 
 Exit: 0 ok · 1 length over cap (hard) · 2 usage · 3 missing core (--strict) · 4 below --min-score
 
-Based on goal-setter-skill by gotalab (MIT); length rules verified against
-Codex (Unicode codepoints) and Claude Code (UTF-16 code units), cap 4000.
+Length rules verified against Codex (Unicode codepoints) and Claude Code
+(UTF-16 code units), cap 4000.
 """
 from __future__ import annotations
 
