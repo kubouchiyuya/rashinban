@@ -1,6 +1,6 @@
 {
   "name": "rashinban",
-  "description": "Single-plugin marketplace for Rashinban: lint and activate compact, verifiable /goal contracts for long autonomous runs. Harness-engineered derivative of goal-setter by gotalab (MIT).",
+  "description": "Single-plugin marketplace for Rashinban: lint and activate compact, verifiable /goal contracts for long autonomous runs.",
   "owner": {
     "name": "kubouchiyuya"
   },
@@ -8,7 +8,7 @@
     {
       "name": "rashinban",
       "source": "./",
-      "description": "Turn a rough request into a linted, host-aware, verifiable /goal. Based on goal-setter by gotalab.",
+      "description": "Turn a rough request into a linted, host-aware, verifiable /goal.",
       "category": "productivity"
     }
   ]
