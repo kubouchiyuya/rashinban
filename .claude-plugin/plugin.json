@@ -1,7 +1,7 @@
 {
   "name": "rashinban",
   "version": "0.2.0",
-  "description": "Rashinban — a compass for autonomous agent goals. Draft, lint, and activate a compact, verifiable /goal for long runs. Harness-engineered derivative of goal-setter by gotalab (MIT).",
+  "description": "Rashinban — a compass for autonomous agent goals. Draft, lint, and activate a compact, verifiable /goal for long runs.",
   "author": {
     "name": "kubouchiyuya"
   },
