@@ -9,7 +9,6 @@ defined.
 
 [![CI](https://github.com/kubouchiyuya/rashinban/actions/workflows/ci.yml/badge.svg)](https://github.com/kubouchiyuya/rashinban/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)
-[![Based on goal-setter](https://img.shields.io/badge/based%20on-goal--setter%20by%20gotalab-black.svg)](https://github.com/gotalab/goal-setter-skill)
 [![deps](https://img.shields.io/badge/deps-zero%20(python%20stdlib)-black.svg)](#-quick-start)
 [![Agents](https://img.shields.io/badge/Codex%20%7C%20Claude%20%7C%20Grok%20%7C%20OpenAI%20%7C%20Gemini-black.svg)](skills/rashinban/adapters/ROUTING.md)
 
@@ -18,11 +17,6 @@ defined.
 </div>
 
 ---
-
-> **Attribution.** Rashinban is a harness-engineered **derivative** of
-> [goal-setter-skill](https://github.com/gotalab/goal-setter-skill) by **gotalab**
-> (MIT). The goal-contract spec is gotalab's; Rashinban adds the harness. See
-> [NOTICE.md](NOTICE.md).
 
 Tell an AI to *"make the app better"* and let it run, and it wanders — it polishes
 the wrong thing, stops too early, or declares victory on a demo that doesn't work.
@@ -41,8 +35,9 @@ python3 skills/rashinban/bin/rashinban activate my-goal.txt
 - **Lints a goal, doesn't just count characters.** `goal_lint.py` checks the
   contract *elements* (objective / evidence / Done / validation / constraints /
   stop), flags vague "better/works" and task-list-as-Done, and scores 0-100.
-- **Knows your runtime.** `rashinban activate` detects Codex / Claude Code / Grok
-  / OpenAI / Gemini / Cursor and tells you exactly how to activate the goal there.
+- **Runs on every runtime.** `rashinban activate` detects Codex, Claude Code,
+  Grok / Grok Build, Gemini, Google Antigravity, Cursor, GLM, DeepSeek, Hermes,
+  and OpenClaw — and any other capable agent runs the portable `/goal` directly.
 - **Bridges into goal-seek.** Inside AKATSUKI, `rashinban bridge` files the goal
   into `plans-store` — non-destructively (the SoT is never edited directly).
 - **Enforces the real length cap.** 4,000 chars, counted the way each runtime
@@ -76,8 +71,7 @@ rashinban goal-lint — score 22/100
 
 ## 🧭 How it works
 
-Rashinban has two halves: the **contract spec** (gotalab's goal-setter, preserved
-in `skills/rashinban/SKILL.md`) and the **harness** (`goal_lint.py`,
+Rashinban has two halves: the **contract spec** (`skills/rashinban/SKILL.md`) and the **harness** (`goal_lint.py`,
 `bin/rashinban`, `goal_seek_bridge.py`, `references/`, `tests/`). It writes and
 checks goals; it does *not* schedule anything — it rides each runtime's native
 goal mechanism. Deep dive → [docs/HOW-IT-WORKS.md](docs/HOW-IT-WORKS.md).
@@ -107,6 +101,4 @@ is what authorizes those tools. It never claims a goal was set unless it was.
 
 ## 📜 License & credit
 
-MIT — see [LICENSE](LICENSE) (Copyright gotalab). Rashinban is an independent
-derivative, **not affiliated with or endorsed by** gotalab. For the canonical
-goal-setter, use the [upstream repo](https://github.com/gotalab/goal-setter-skill).
+MIT — see [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md).

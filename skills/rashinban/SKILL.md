@@ -17,7 +17,7 @@ guardrails:
 
 # 羅針盤 / Rashinban — Goal Setter (harness edition)
 
-> Based on [goal-setter-skill](https://github.com/gotalab/goal-setter-skill) by gotalab (MIT). Rashinban keeps this contract spec and adds a deterministic harness: `scripts/goal_lint.py` (element + quality + length gate), `bin/rashinban` (host-aware lint / activate / bridge), `scripts/goal_seek_bridge.py` (AKATSUKI plans-store drop-off), and `references/` (templates, validation playbooks, cross-runtime routing). Lint the draft before activating.
+> Rashinban writes and lints compact /goal contracts and adds a deterministic harness: `scripts/goal_lint.py` (element + quality + length gate), `bin/rashinban` (host-aware lint / activate / bridge), `scripts/goal_seek_bridge.py` (AKATSUKI plans-store drop-off), and `references/` (templates, validation playbooks, cross-runtime routing). Lint the draft before activating.
 
 Turn a rough request into a compact `/goal` that says what result is expected, what Done means, how to check it, what must not be broken, when to stop, and how Codex should run it. Treat this as Goal intake: decide whether to ask, briefly explore, draft, activate, or say a normal prompt is a better fit.
 

@@ -2,7 +2,6 @@
 
 > 自律エージェントのゴールの羅針盤。
 > English: [GUIDE.md](GUIDE.md) · Repo: https://github.com/kubouchiyuya/rashinban
-> [goal-setter-skill](https://github.com/gotalab/goal-setter-skill)（gotalab・MIT）の派生。
 
 ## 非エンジニアでも分かる話
 

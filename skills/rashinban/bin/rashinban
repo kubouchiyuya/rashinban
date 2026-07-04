@@ -43,27 +43,43 @@ def detect_host() -> dict:
         "claude-code": bool(env.get("CLAUDE_PROJECT_DIR") or (home / ".claude").exists()),
         "cursor": (Path(".cursorrules").exists() or (home / ".cursor").exists()),
         "gemini": (Path("GEMINI.md").exists() or (home / ".gemini").exists()),
-        "grok": (home / ".grok").exists(),
+        "grok": bool((home / ".grok").exists() or env.get("GROK_API_KEY")),
+        "antigravity": (home / ".antigravity").exists(),
+        "glm": bool(env.get("GLM_API_KEY") or (home / ".glm").exists()),
+        "deepseek": bool(env.get("DEEPSEEK_API_KEY") or (home / ".deepseek").exists()),
+        "hermes": (Path(".claude/state/plans-store").exists() or (home / ".larc").exists()),
+        "openclaw": bool(env.get("OPENCLAW_HOME") or (home / ".openclaw").exists()),
     }
     active = [k for k, v in signals.items() if v]
     return {"signals": signals, "active": active}
 
 
+# runtimes with a native goal / orchestration mechanism get specific guidance;
+# everyone else runs the portable /goal line directly.
+_NATIVE_GUIDANCE = {
+    "codex": "Codex: if the goal does NOT need spawn_agent/create_thread, set it "
+             "with the native goal tool (check get_goal first); if it DOES, YOU "
+             "must send the /goal line — sending it is what authorizes those tools.",
+    "claude-code": "Claude Code: send the /goal line; decomposition can fan out "
+                   "as a dynamic workflow (read-only stages → subagents).",
+    "hermes": "Hermes: enqueue the /goal as the objective; the router dispatches "
+              "a worker that runs it to Done.",
+    "openclaw": "OpenClaw: set the /goal as the run objective; the block/stop "
+                "clause is the runtime's halt condition.",
+}
+_GENERIC = ("grok", "gemini", "cursor", "antigravity", "glm", "deepseek")
+
+
 def _activation_guidance(host_active: list) -> list:
-    g = []
-    if "codex" in host_active:
-        g.append("Codex: if the goal does NOT need spawn_agent/create_thread, it "
-                 "may be set with the native goal tool; if it DOES, YOU must send "
-                 "the /goal line — sending it is what authorizes those tools.")
-    if "claude-code" in host_active:
-        g.append("Claude Code: send the /goal line; the goal can fan out as a "
-                 "dynamic workflow (read-only stages → subagents).")
-    for a in ("grok", "openai", "gemini", "cursor"):
-        if a in host_active:
-            g.append(f"{a}: no native goal tool assumed — send the /goal line and "
-                     f"let the agent run it; keep run/stop rules in the contract.")
+    g = [_NATIVE_GUIDANCE[h] for h in host_active if h in _NATIVE_GUIDANCE]
+    generic = [h for h in host_active if h in _GENERIC]
+    if generic:
+        g.append(f"{', '.join(generic)}: no native goal tool — send the /goal "
+                 f"line as the task; the contract is self-contained (run/stop "
+                 f"rules travel with it).")
     if not g:
-        g.append("No runtime detected — send the emitted /goal line to your agent.")
+        g.append("No runtime detected — send the /goal line to your agent; a /goal "
+                 "is portable and any capable agent can run it.")
     return g
 
 

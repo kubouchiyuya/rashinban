@@ -29,8 +29,3 @@ edited directly.
 
 **Dependencies?** None. Pure Python standard library. If `python3` runs, it runs.
 
-**How is this related to gotalab's goal-setter?** Rashinban is a harness-engineered
-**derivative** of [goal-setter-skill](https://github.com/gotalab/goal-setter-skill)
-(MIT). The contract spec is gotalab's; Rashinban adds the lint, CLI, bridge,
-references, and tests. Attribution is preserved in `LICENSE` and `NOTICE.md`. It
-is not affiliated with or endorsed by gotalab.

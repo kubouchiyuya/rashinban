@@ -2,7 +2,6 @@
 
 > A compass for autonomous agent goals.
 > 日本語版: [GUIDE.ja.md](GUIDE.ja.md) · Repo: https://github.com/kubouchiyuya/rashinban
-> Based on [goal-setter-skill](https://github.com/gotalab/goal-setter-skill) by gotalab (MIT).
 
 ## Read this even if you're not an engineer
 

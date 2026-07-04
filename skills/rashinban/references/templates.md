@@ -7,7 +7,7 @@ brackets, delete any clause that would not change the run, then lint:
     python3 scripts/goal_lint.py <file>
 
 These are starting points, not fill-in forms — a Goal is prose in the task's own
-terms. Based on goal-setter-skill by gotalab (MIT).
+terms.
 
 ---
 
