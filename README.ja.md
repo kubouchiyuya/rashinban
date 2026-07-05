@@ -80,12 +80,6 @@ rashinban goal-lint — score 22/100
 | `sh tests/smoke.sh` | 6 アサーション（良は通過・弱は指摘・超過は失敗・CLI が /goal 行を出力） |
 | GitHub Actions (`ci.yml`) | push ごとに lint+smoke 実行 — 上のバッジが証拠 |
 
-## 🔗 関連プロジェクト
-
-- 🛡️ **[狛犬 / Komainu](https://github.com/kubouchiyuya/komainu)** — 取り込み
-  ガーディアン。AI が触れる前に repo/skill/plugin を検める。狛犬は*入ってくる物*を
-  守り、羅針盤は*向かう先*を定める。
-
 ## 🤝 コントリビュート
 
 [CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) ·
