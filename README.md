@@ -88,12 +88,6 @@ is what authorizes those tools. It never claims a goal was set unless it was.
 | `sh tests/smoke.sh` | 6 offline assertions: good goal passes, weak goal is flagged, over-cap fails, CLI emits the `/goal` line |
 | GitHub Actions (`ci.yml`) | runs lint + smoke on every push — the badge above is the proof |
 
-## 🔗 Related projects
-
-- 🛡️ **[狛犬 / Komainu](https://github.com/kubouchiyuya/komainu)** — a clone/install
-  guardian that vets any repo/skill/plugin before your AI touches it. Komainu
-  guards what comes *in*; Rashinban aims where you're *going*.
-
 ## 🤝 Contributing
 
 [CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) ·
