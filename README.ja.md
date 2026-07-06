@@ -11,7 +11,9 @@
 [![deps](https://img.shields.io/badge/deps-zero%20(python%20stdlib)-black.svg)](#-クイックスタート)
 [![Agents](https://img.shields.io/badge/Codex%20%7C%20Claude%20%7C%20Grok%20%7C%20OpenAI%20%7C%20Gemini-black.svg)](skills/rashinban/adapters/ROUTING.md)
 
-[English](README.md) · [ガイド](docs/GUIDE.ja.md) · [仕組み](docs/HOW-IT-WORKS.md)
+[English](README.md) · [中文](README.zh.md) · [ガイド](docs/GUIDE.ja.md) · [仕組み](docs/HOW-IT-WORKS.md)
+
+**Rashinban が検証可能なゴール作りに役立ったら、⭐ を。他のエージェント開発者が見つけやすくなります。**
 
 </div>
 
