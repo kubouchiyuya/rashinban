@@ -12,7 +12,9 @@ defined.
 [![deps](https://img.shields.io/badge/deps-zero%20(python%20stdlib)-black.svg)](#-quick-start)
 [![Agents](https://img.shields.io/badge/Codex%20%7C%20Claude%20%7C%20Grok%20%7C%20OpenAI%20%7C%20Gemini-black.svg)](skills/rashinban/adapters/ROUTING.md)
 
-[日本語](README.ja.md) · [Guide](docs/GUIDE.md) · [How it works](docs/HOW-IT-WORKS.md)
+[日本語](README.ja.md) · [中文](README.zh.md) · [Guide](docs/GUIDE.md) · [How it works](docs/HOW-IT-WORKS.md)
+
+**If Rashinban helped you ship a verifiable goal, a ⭐ helps other agent builders find it.**
 
 </div>
 
