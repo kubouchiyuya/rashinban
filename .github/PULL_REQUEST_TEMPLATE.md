@@ -15,5 +15,5 @@
 - [ ] `sh tests/smoke.sh` is green
 - [ ] Fixtures updated (a good goal and a weak goal, if lint changed)
 - [ ] Still a meta-skill — no scheduler added
-- [ ] `LICENSE` / `NOTICE.md` attribution to gotalab preserved
+- [ ] `LICENSE` preserved
 - [ ] Docs updated if behavior changed
