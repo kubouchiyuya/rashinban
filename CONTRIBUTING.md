@@ -7,11 +7,11 @@ Thanks for helping aim agents at verifiable goals. Rashinban is small on purpose
 
 - **Keep it a meta-skill.** Rashinban writes and checks `/goal` contracts; it does
   not implement tasks or schedule runs — it rides each runtime's native goal
-  mechanism (like upstream goal-setter). PRs that add a scheduler are out of scope.
+  mechanism. PRs that add a scheduler are out of scope.
 - **The lint is guidance, length is the gate.** A `/goal` is prose, so element
   checks are heuristic. Only the 4,000-char cap is a hard failure.
 - **Be honest.** A high lint score means *well-formed*, not *good*. Docs say so.
-- **Preserve attribution.** Keep `LICENSE` and `NOTICE.md` intact.
+- **Preserve licensing.** Keep `LICENSE` intact.
 
 ## Dev loop
 
